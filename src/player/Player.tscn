@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://cexbc3lrswllq"]
+
+[ext_resource type="Script" path="res://src/player/Player.cs" id="1_ihxxa"]
+[ext_resource type="Texture2D" uid="uid://koaykjfclfwx" path="res://assets/sprites/Player/Player1.png" id="2_ox738"]
+[ext_resource type="Texture2D" uid="uid://hrtr127c8fab" path="res://assets/sprites/Player/Player2.png" id="3_nby0p"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_npdlf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ox738")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_nby0p")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pufo7"]
+radius = 24.0
+height = 48.0
+
+[node name="Player" type="CharacterBody2D"]
+position = Vector2(0, 3)
+script = ExtResource("1_ihxxa")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_npdlf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 3)
+shape = SubResource("CapsuleShape2D_pufo7")
+
+[node name="Camera2D" type="Camera2D" parent="."]
