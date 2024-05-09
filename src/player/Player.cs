@@ -18,38 +18,42 @@ public partial class Player : CharacterBody2D
 	public int CritChance { get; set; } = 0;
 	public int Level { get; set; } = 0;
 	public int XP { get; set; } = 0;
-	public Weapon CurrentWeapon { get; set; } = null;
 
 	private int _health;
+	private AnimatedSprite2D _sprite;
+	private Timer _clock;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
+		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_clock = GetNode<Timer>("Timer");
+
+		_clock.Timeout += Attack;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Movement(delta);
+		GetInput();
+		MoveAndSlide();
 	}
 
-	private void Movement(double delta) {
-		var velocity = Godot.Vector2.Zero;
-
-		if(Input.IsActionPressed("move_up")) velocity.Y -= 1;
-		if(Input.IsActionPressed("move_down")) velocity.Y += 1;
-		if(Input.IsActionPressed("move_right")) velocity.X += 1;
-		if(Input.IsActionPressed("move_left")) velocity.X -= 1;
-
-		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-
-		if(velocity.Length() > 0) {
-			velocity = velocity.Normalized() * Speed;
-			animatedSprite2D.Play();
+	//Movement logic
+	private void GetInput() {
+		Godot.Vector2 inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		Velocity = inputDirection * Speed;
+		if(Velocity.Length() > 0) 
+		{
+			_sprite.Play();
 		}
-		else {animatedSprite2D.Stop();}
+		else
+		{
+			_sprite.Stop();	
+		}
+	}
 
-		Position += velocity * (float)delta;
+	private void Attack() {
+		
 	}
 }

@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://cexbc3lrswllq"]
+[gd_scene load_steps=11 format=3 uid="uid://cexbc3lrswllq"]
 
 [ext_resource type="Script" path="res://src/player/Player.cs" id="1_ihxxa"]
 [ext_resource type="Texture2D" uid="uid://koaykjfclfwx" path="res://assets/sprites/Player/Player1.png" id="2_ox738"]
 [ext_resource type="Texture2D" uid="uid://hrtr127c8fab" path="res://assets/sprites/Player/Player2.png" id="3_nby0p"]
+[ext_resource type="Script" path="res://src/player/Weapon/WeaponHitbox.cs" id="4_tu0d8"]
+[ext_resource type="Texture2D" uid="uid://cg8f273s7os1c" path="res://assets/sprites/Weapons/Attack.png" id="5_eefna"]
+[ext_resource type="Script" path="res://src/player/Weapon/ExtendedMarker.cs" id="5_mcxv8"]
+[ext_resource type="Script" path="res://src/player/Weapon/WeaponOrigin.cs" id="7_5wjrs"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_npdlf"]
 animations = [{
@@ -22,15 +26,45 @@ animations = [{
 radius = 24.0
 height = 48.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j54aq"]
+size = Vector2(91.4522, 176.276)
+
 [node name="Player" type="CharacterBody2D"]
-position = Vector2(0, 3)
 script = ExtResource("1_ihxxa")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_npdlf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3, 3)
 shape = SubResource("CapsuleShape2D_pufo7")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="Origin" type="Marker2D" parent="."]
+scale = Vector2(1.50194, -1.08514)
+
+[node name="WeaponHitbox" type="Area2D" parent="."]
+scale = Vector2(0.732623, 1.06084)
+script = ExtResource("4_tu0d8")
+metadata/_edit_group_ = true
+
+[node name="ExtendedMarker" type="Marker2D" parent="WeaponHitbox"]
+script = ExtResource("5_mcxv8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeaponHitbox"]
+shape = SubResource("RectangleShape2D_j54aq")
+
+[node name="Sprite2D" type="Sprite2D" parent="WeaponHitbox/CollisionShape2D"]
+rotation = 1.5708
+scale = Vector2(2.87163, 1.36983)
+texture = ExtResource("5_eefna")
+
+[node name="WeaponOrigin" type="Marker2D" parent="WeaponHitbox"]
+scale = Vector2(1.04891, 1)
+script = ExtResource("7_5wjrs")
+Radius = 100.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
