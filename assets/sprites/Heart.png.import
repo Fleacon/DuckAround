@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cg8f273s7os1c"
-path="res://.godot/imported/Attack.png-5025ffb26a7e894ae4d995d060ce49bf.ctex"
+uid="uid://bd4spdhc3obp2"
+path="res://.godot/imported/Heart.png-31c836a7fc07a4aec24d397b5372a25c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Weapons/Attack.png"
-dest_files=["res://.godot/imported/Attack.png-5025ffb26a7e894ae4d995d060ce49bf.ctex"]
+source_file="res://assets/sprites/Heart.png"
+dest_files=["res://.godot/imported/Heart.png-31c836a7fc07a4aec24d397b5372a25c.ctex"]
 
 [params]
 
