@@ -7,16 +7,18 @@ public partial class Frownie : CharacterBody2D
 	[Export] public int Health { get; set; } = 100;
 	[Export] public int AttackDamage { get; set; } = 15;
 	[Export] public int Points { get; set; } = 50;
+    [Export] public double AttackCooldown { get; set; } = 0.5;
+    [Export] public int Speed { get; set; } = 350;
 
-	private ProgressBar _healthbar;
+    [Signal] public delegate void EnemyHealthDepletedEventHandler(int points);
+    [Signal] public delegate void PlayerInAttackRangeEventHandler(int damage);
+
+    private ProgressBar _healthbar;
 	private Area2D _hurtbox;
 	private Player _player;
-
 	private bool _canAttack = true;
 
-	[Signal] public delegate void EnemyHealthDepletedEventHandler(int points);
-	[Signal] public delegate void PlayerInAttackRangeEventHandler(int damage);
-    [Export] public double AttackCooldown { get; set; } = 0.5;
+
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -42,6 +44,8 @@ public partial class Frownie : CharacterBody2D
 			EmitSignal(SignalName.PlayerInAttackRange, AttackDamage);
             GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
         }
+		Vector2 direction = (_player.GlobalPosition - GlobalPosition).Normalized();
+		MoveAndCollide(direction);
 	}
 
 	public void Initialize(Vector2 startPosition, Player player)

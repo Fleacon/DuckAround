@@ -28,8 +28,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pufo7"]
-radius = 24.0
-height = 48.0
+radius = 20.0
+height = 40.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cm365"]
 size = Vector2(65.518, 176.276)
@@ -69,6 +69,7 @@ AttackCooldown = 0.6
 sprite_frames = SubResource("SpriteFrames_npdlf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_pufo7")
 
 [node name="Origin" type="Marker2D" parent="."]

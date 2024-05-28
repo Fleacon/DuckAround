@@ -6,22 +6,21 @@ public partial class Player : CharacterBody2D
 {
 	[Export] public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; set; }
-	[Export]public int Speed { get; set; } = 400;
+	[Export] public int Speed { get; set; } = 370;
 	[Export] public int Damage { get; set; } = 10;
 	[Export] public double AttackCooldown { get; set; } = 0.5;
 
-	private bool _canAttack = true;
+    [Signal] public delegate void PlayerAttackedEventHandler(Area2D weaponHitbox, int damage);
+    [Signal] public delegate void PlayerTookDamageEventHandler(int currentHealth);
+    [Signal] public delegate void PlayerHealthDepletedEventHandler();
 
 	private Area2D _weaponHitbox;
 	private AnimatedSprite2D _sprite;
 	private AnimatedSprite2D _weaponAnimation;
+    private bool _canAttack = true;
 
-	[Signal] public delegate void PlayerAttackedEventHandler(Area2D weaponHitbox, int damage);
-	[Signal] public delegate void PlayerTookDamageEventHandler(int currentHealth);
-	[Signal] public delegate void PlayerHealthDepletedEventHandler();
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_weaponHitbox = GetNode<WeaponHitbox>("WeaponHitbox");
@@ -35,7 +34,8 @@ public partial class Player : CharacterBody2D
 		GetInput();
 		MoveAndSlide();
 		if(Input.IsActionJustPressed("attack")) Attack(Damage);
-	}
+		if(CurrentHealth < 0) EmitSignal(SignalName.PlayerHealthDepleted);
+    }
 
 	//Movement logic
 	public void GetInput() {
@@ -66,13 +66,6 @@ public partial class Player : CharacterBody2D
 	{
 		CurrentHealth -= damage;
 		GD.Print($"Player: Ouch | {CurrentHealth}");
-		if((MaxHealth - damage) > 0)
-		{
-            EmitSignal(SignalName.PlayerTookDamage, CurrentHealth);
-        }
-		else
-		{
-			EmitSignal(SignalName.PlayerHealthDepleted);
-		}
+        EmitSignal(SignalName.PlayerTookDamage, CurrentHealth);
 	}
 }
