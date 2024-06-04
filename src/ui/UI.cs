@@ -12,12 +12,6 @@ public partial class UI : CanvasLayer
 		_score = GetNode<Score>("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Score");
     }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-
-	}
-
 	public void Initialize(Player player)
 	{
 		InitHealthbar(player);
@@ -32,7 +26,6 @@ public partial class UI : CanvasLayer
 
 	public void InitScore(Frownie frownie)
 	{
-		GD.Print(frownie);
 		frownie.EnemyHealthDepleted += _score.UpdateScore;
 	}
 }

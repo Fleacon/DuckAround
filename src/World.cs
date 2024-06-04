@@ -18,6 +18,7 @@ public partial class World : Node2D
 		_player = GetNode<Player>("Player");
 		_player.PlayerHealthDepleted += GameOver;
 		_mobSpawnTimer = GetNode<Timer>("MobSpawnTimer");
+
         _mobSpawnTimer.Timeout += SpawnFrownie;
         InitializeUI();
     }
@@ -35,13 +36,13 @@ public partial class World : Node2D
     public void SpawnFrownie()
 	{
         Random rng = new Random();
-        for (int i = 0; i < rng.Next(1,10); i++)
+        for (int i = 0; i < rng.Next(1,5); i++)
         {
             var _frownie = FrownieScene.Instantiate<Frownie>();
             var mobSpawnLocation = GetNode<PathFollow2D>("MobPath/MobSpawnLocation");
 
             mobSpawnLocation.ProgressRatio = GD.Randf();
-            _frownie.Initialize(mobSpawnLocation.Position, _player);
+            _frownie.Initialize(mobSpawnLocation.GlobalPosition, _player);
 
             _frownie.PlayerInAttackRange += _player.EnemyAttacked;
             _ui.InitScore(_frownie);

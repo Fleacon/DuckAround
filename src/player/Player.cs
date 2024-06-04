@@ -41,6 +41,14 @@ public partial class Player : CharacterBody2D
 	public void GetInput() {
 		Godot.Vector2 inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 		Velocity = inputDirection * Speed;
+		if(inputDirection.X < 0)
+		{
+			_sprite.FlipH = true;
+		}
+		else
+		{
+			_sprite.FlipH = false;
+		}
 		if(Velocity.Length() > 0) 
 		{
 			_sprite.Play();

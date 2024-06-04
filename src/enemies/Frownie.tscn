@@ -25,10 +25,16 @@ bg_color = Color(0.13, 0.13, 0.13, 0.4)
 bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l2cfw"]
-size = Vector2(78, 75)
+size = Vector2(64, 58)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 script = ExtResource("1_v3v0b")
+Speed = 300
+Acceleration = 5
+
+[node name="NavTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(7.10543e-15, 0)
@@ -54,5 +60,7 @@ show_percentage = false
 [node name="Hurtbox" type="Area2D" parent="."]
 
 [node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0, 0.5)
+position = Vector2(-1, 1)
 shape = SubResource("RectangleShape2D_l2cfw")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]

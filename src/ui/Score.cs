@@ -3,21 +3,22 @@ using System;
 
 public partial class Score : Label
 {
-	public int ScoreCount { get; set; }
+	private GameData _gameData;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Text = "Score: 0";
+        _gameData = GetNode<GameData>("/root/GameData");
+        Text = "Score: 0";
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Text = $"Score: {ScoreCount}";
+		Text = $"Score: {_gameData.Score}";
 	}
 
 	public void UpdateScore(int points)
 	{
-		ScoreCount += points;
+		_gameData.Score += points;
 	}
 }

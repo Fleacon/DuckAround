@@ -9,6 +9,7 @@ public partial class Frownie : CharacterBody2D
 	[Export] public int Points { get; set; } = 50;
     [Export] public double AttackCooldown { get; set; } = 0.5;
     [Export] public int Speed { get; set; } = 350;
+	[Export] public int Acceleration { get; set; } = 7;
 
     [Signal] public delegate void EnemyHealthDepletedEventHandler(int points);
     [Signal] public delegate void PlayerInAttackRangeEventHandler(int damage);
@@ -16,6 +17,10 @@ public partial class Frownie : CharacterBody2D
     private ProgressBar _healthbar;
 	private Area2D _hurtbox;
 	private Player _player;
+	private Timer _pathfindingTmer;
+	private NavigationAgent2D _navigation;
+	private Timer _navTimer;
+	private AnimatedSprite2D _sprite;
 	private bool _canAttack = true;
 
 
@@ -25,8 +30,13 @@ public partial class Frownie : CharacterBody2D
 	{
 		_healthbar = GetNode<ProgressBar>("Healthbar");
 		_hurtbox = GetNode<Area2D>("Hurtbox");
-		_player.PlayerAttacked += OnPlayerAttacked;
-	}
+		_navigation = GetNode<NavigationAgent2D>("NavigationAgent2D");
+		_navTimer = GetNode<Timer>("NavTimer");
+		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
+		_navTimer.Timeout += SetTarget;
+        _player.PlayerAttacked += OnPlayerAttacked;
+    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -44,14 +54,25 @@ public partial class Frownie : CharacterBody2D
 			EmitSignal(SignalName.PlayerInAttackRange, AttackDamage);
             GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
         }
-		Vector2 direction = (_player.GlobalPosition - GlobalPosition).Normalized();
-		MoveAndCollide(direction);
+		Vector2 direction = Vector2.Zero;
+		direction = _navigation.GetNextPathPosition() - GlobalPosition;
+		direction = direction.Normalized();
+		Velocity = Velocity.Lerp(direction*Speed, (float)(Acceleration * delta));
+		if(direction.X < 0)
+		{
+			_sprite.FlipH = true;
+		}
+		else
+		{
+			_sprite.FlipH = false;
+		}
+		MoveAndSlide();
 	}
 
 	public void Initialize(Vector2 startPosition, Player player)
 	{	
 		_player = player;
-		Position = startPosition;
+		GlobalPosition = startPosition;
 	}
 
 	public void OnPlayerAttacked(Area2D weaponHitbox, int damage)
@@ -61,5 +82,11 @@ public partial class Frownie : CharacterBody2D
 		{
 			Health -= damage;
 		}
+	}
+
+	public void SetTarget()
+	{
+		GD.Print("YO");
+		_navigation.TargetPosition = _player.GlobalPosition;
 	}
 }

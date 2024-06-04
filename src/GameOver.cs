@@ -3,9 +3,17 @@ using System;
 
 public partial class GameOver : Control
 {
-    // Called when the node enters the scene tree for the first time.
+    GameData _gameData;
     public override void _Ready()
 	{
         GetNode<Button>("StartButton").ButtonDown += () => GetTree().ChangeSceneToFile("res://src/World.tscn");
+        _gameData = GetNode<GameData>("/root/GameData");
+        GetNode<Label>("Score").Text = $"Score {_gameData.Score}";
+    }
+
+    public void RestartGame()
+    {
+        GetTree().ChangeSceneToFile("res://src/World.tscn");
+        _gameData.Score = 0;
     }
 }
