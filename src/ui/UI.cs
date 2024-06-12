@@ -5,23 +5,20 @@ public partial class UI : CanvasLayer
 {
 	private Healthbar _healthbar;
 	private Score _score;
+	private GameData _gameData;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        _healthbar = GetNode<Healthbar>("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Healthbar");
-		_score = GetNode<Score>("MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/Score");
+        _healthbar = GetNode<Healthbar>("Healthbar");
+        _score = GetNode<Score>("Score");
+        _gameData = GetNode<GameData>("/root/GameData");
     }
 
-	public void Initialize(Player player)
+	public void InitHealthbar()
 	{
-		InitHealthbar(player);
-    }
-
-	public void InitHealthbar(Player player)
-	{
-        player.PlayerTookDamage += _healthbar.ChangePlayerHealth;
-        _healthbar.Value = player.MaxHealth;
-        _healthbar.MaxValue = player.MaxHealth;
+        _gameData.Player.PlayerTookDamage += _healthbar.ChangePlayerHealth;
+        _healthbar.Value = _gameData.Player.MaxHealth;
+        _healthbar.MaxValue = _gameData.Player.MaxHealth;
     }
 
 	public void InitScore(Frownie frownie)

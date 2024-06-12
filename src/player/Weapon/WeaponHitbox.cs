@@ -22,10 +22,10 @@ public partial class WeaponHitbox : Area2D
 	{
 		UpdatePositionAndRoation(); 
 	}
-
 	public void UpdatePositionAndRoation()
 	{
 		Position = _weaponOrigin.Position;
 		_collisionShape.LookAt(_extendedMarker.GlobalPosition);
 	}
 }
+

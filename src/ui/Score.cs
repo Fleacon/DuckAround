@@ -14,7 +14,7 @@ public partial class Score : Label
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Text = $"Score: {_gameData.Score}";
+		Text = $"{_gameData.Score} :Score";
 	}
 
 	public void UpdateScore(int points)

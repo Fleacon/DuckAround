@@ -6,7 +6,7 @@ public partial class Player : CharacterBody2D
 {
 	[Export] public int MaxHealth { get; set; } = 100;
 	public int CurrentHealth { get; set; }
-	[Export] public int Speed { get; set; } = 370;
+	[Export] public int Speed { get; set; } = 310;
 	[Export] public int Damage { get; set; } = 10;
 	[Export] public double AttackCooldown { get; set; } = 0.5;
 
@@ -33,6 +33,7 @@ public partial class Player : CharacterBody2D
 	{
 		GetInput();
 		MoveAndSlide();
+		if(CurrentHealth > 100) CurrentHealth = 100;
 		if(Input.IsActionJustPressed("attack")) Attack(Damage);
 		if(CurrentHealth < 0) EmitSignal(SignalName.PlayerHealthDepleted);
     }
@@ -45,7 +46,7 @@ public partial class Player : CharacterBody2D
 		{
 			_sprite.FlipH = true;
 		}
-		else
+		if(inputDirection.X > 0)
 		{
 			_sprite.FlipH = false;
 		}
@@ -73,7 +74,6 @@ public partial class Player : CharacterBody2D
 	public void EnemyAttacked(int damage)
 	{
 		CurrentHealth -= damage;
-		GD.Print($"Player: Ouch | {CurrentHealth}");
         EmitSignal(SignalName.PlayerTookDamage, CurrentHealth);
 	}
 }

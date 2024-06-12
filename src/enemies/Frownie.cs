@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Numerics;
 
 public partial class Frownie : CharacterBody2D
 {
@@ -8,7 +9,7 @@ public partial class Frownie : CharacterBody2D
 	[Export] public int AttackDamage { get; set; } = 15;
 	[Export] public int Points { get; set; } = 50;
     [Export] public double AttackCooldown { get; set; } = 0.5;
-    [Export] public int Speed { get; set; } = 350;
+    [Export] public int Speed { get; set; } = 330;
 	[Export] public int Acceleration { get; set; } = 7;
 
     [Signal] public delegate void EnemyHealthDepletedEventHandler(int points);
@@ -16,14 +17,12 @@ public partial class Frownie : CharacterBody2D
 
     private ProgressBar _healthbar;
 	private Area2D _hurtbox;
-	private Player _player;
 	private Timer _pathfindingTmer;
 	private NavigationAgent2D _navigation;
 	private Timer _navTimer;
 	private AnimatedSprite2D _sprite;
+	private GameData _gameData;
 	private bool _canAttack = true;
-
-
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -34,8 +33,7 @@ public partial class Frownie : CharacterBody2D
 		_navTimer = GetNode<Timer>("NavTimer");
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
-		_navTimer.Timeout += SetTarget;
-        _player.PlayerAttacked += OnPlayerAttacked;
+        ConnectSignals();
     }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,17 +42,17 @@ public partial class Frownie : CharacterBody2D
 		_healthbar.Value = Health;
 		if (Health <= 0)
 		{
-			_player.PlayerAttacked -= OnPlayerAttacked;
+			_gameData.Player.PlayerAttacked -= OnPlayerAttacked;
             QueueFree();
             EmitSignal(SignalName.EnemyHealthDepleted, Points);
 		}
-		if (_hurtbox.OverlapsBody(_player) && _canAttack)
+		if (_hurtbox.OverlapsBody(_gameData.Player) && _canAttack)
 		{
 			_canAttack = false;
 			EmitSignal(SignalName.PlayerInAttackRange, AttackDamage);
             GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
         }
-		Vector2 direction = Vector2.Zero;
+		Godot.Vector2 direction = Godot.Vector2.Zero;
 		direction = _navigation.GetNextPathPosition() - GlobalPosition;
 		direction = direction.Normalized();
 		Velocity = Velocity.Lerp(direction*Speed, (float)(Acceleration * delta));
@@ -62,18 +60,29 @@ public partial class Frownie : CharacterBody2D
 		{
 			_sprite.FlipH = true;
 		}
-		else
+		if(direction.X > 0)
 		{
 			_sprite.FlipH = false;
 		}
 		MoveAndSlide();
 	}
 
-	public void Initialize(Vector2 startPosition, Player player)
-	{	
-		_player = player;
+	public void Initialize(Godot.Vector2 startPosition, GameData gameData, bool isSpecial)
+	{
+		_gameData = gameData;
 		GlobalPosition = startPosition;
-	}
+        _gameData.UI.InitScore(this);
+		AddToGroup("Enemies");
+        _gameData.SpawnedMobs += 1;
+		if (isSpecial)
+		{
+			_healthbar.MaxValue = 250;
+			Health = 250;
+			Points = 100;
+			Speed = 360;
+			Scale = new Godot.Vector2((float)1.2,(float)1.2);
+		}
+    }
 
 	public void OnPlayerAttacked(Area2D weaponHitbox, int damage)
 	{
@@ -86,7 +95,13 @@ public partial class Frownie : CharacterBody2D
 
 	public void SetTarget()
 	{
-		GD.Print("YO");
-		_navigation.TargetPosition = _player.GlobalPosition;
+		_navigation.TargetPosition = _gameData.Player.GlobalPosition;
 	}
+
+	public void ConnectSignals()
+	{
+		_gameData.Player.PlayerAttacked += OnPlayerAttacked;
+		PlayerInAttackRange += _gameData.Player.EnemyAttacked;
+        _navTimer.Timeout += SetTarget;
+    }
 }

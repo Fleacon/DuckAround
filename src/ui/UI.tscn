@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bc15jm1tiuirk"]
+[gd_scene load_steps=8 format=3 uid="uid://bc15jm1tiuirk"]
 
 [ext_resource type="Script" path="res://src/ui/UI.cs" id="1_n21we"]
 [ext_resource type="Texture2D" uid="uid://2iqponmr73ey" path="res://assets/ui/HealthbarUnder.png" id="2_klr82"]
@@ -6,49 +6,58 @@
 [ext_resource type="Script" path="res://src/ui/Healthbar.cs" id="4_m30l3"]
 [ext_resource type="FontFile" uid="uid://dqsa26dgokpr7" path="res://fonts/m5x7.ttf" id="5_navqu"]
 [ext_resource type="Script" path="res://src/ui/Score.cs" id="5_o8s3u"]
+[ext_resource type="Script" path="res://src/ui/Wave.cs" id="6_426s3"]
 
 [node name="Ui" type="CanvasLayer"]
 script = ExtResource("1_n21we")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-
-[node name="Healthbar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Healthbar" type="TextureProgressBar" parent="."]
 texture_filter = 1
 custom_minimum_size = Vector2(160, 32)
-layout_mode = 2
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 170.0
+offset_bottom = 42.0
 size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_vertical = 0
 value = 100.0
 nine_patch_stretch = true
 texture_under = ExtResource("2_klr82")
 texture_progress = ExtResource("3_myi16")
 script = ExtResource("4_m30l3")
 
-[node name="Score" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 10
+[node name="Wave" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -39.0
+offset_top = 5.0
+offset_right = 39.0
+offset_bottom = 43.0
+grow_horizontal = 2
+size_flags_horizontal = 4
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_navqu")
 theme_override_font_sizes/font_size = 48
+text = "Wave"
+script = ExtResource("6_426s3")
+
+[node name="Score" type="Label" parent="."]
+texture_filter = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -94.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 43.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_navqu")
+theme_override_font_sizes/font_size = 48
+text = ":Score"
+text_direction = 2
 script = ExtResource("5_o8s3u")

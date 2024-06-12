@@ -76,7 +76,6 @@ shape = SubResource("CapsuleShape2D_pufo7")
 scale = Vector2(1.50194, -1.08514)
 
 [node name="WeaponHitbox" type="Area2D" parent="."]
-scale = Vector2(0.732623, 1.06084)
 script = ExtResource("4_4bncr")
 metadata/_edit_group_ = true
 
@@ -93,6 +92,6 @@ script = ExtResource("11_qednn")
 [node name="WeaponOrigin" type="Marker2D" parent="WeaponHitbox"]
 scale = Vector2(1.04891, 1)
 script = ExtResource("12_s85yt")
-Radius = 100.0
+Radius = 120.0
 
 [connection signal="area_entered" from="WeaponHitbox" to="WeaponHitbox" method="OnHitboxEntered"]

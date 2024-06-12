@@ -8,12 +8,12 @@ public partial class GameOver : Control
 	{
         GetNode<Button>("StartButton").ButtonDown += () => GetTree().ChangeSceneToFile("res://src/World.tscn");
         _gameData = GetNode<GameData>("/root/GameData");
-        GetNode<Label>("Score").Text = $"Score {_gameData.Score}";
+        GetNode<Label>("Wave").Text = $"Wave: {_gameData.CurrentWave}";
+        GetNode<Label>("Score").Text = $"Score: {_gameData.Score}";
     }
 
     public void RestartGame()
     {
         GetTree().ChangeSceneToFile("res://src/World.tscn");
-        _gameData.Score = 0;
     }
 }
