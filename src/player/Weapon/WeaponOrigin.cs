@@ -20,6 +20,8 @@ public partial class WeaponOrigin : Marker2D
 	{
 		ChangePosition();
 	}
+
+	// Funktion zum veraendern der Position in Richtung Maus in einem Radius
 	private void ChangePosition()
 	{
         var mousePosition = _origin.GetLocalMousePosition().Round();

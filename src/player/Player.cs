@@ -17,6 +17,7 @@ public partial class Player : CharacterBody2D
 	private Area2D _weaponHitbox;
 	private AnimatedSprite2D _sprite;
 	private AnimatedSprite2D _weaponAnimation;
+	private AudioStreamPlayer _attackSFX;
     private bool _canAttack = true;
 
     // Called when the node enters the scene tree for the first time.
@@ -25,21 +26,22 @@ public partial class Player : CharacterBody2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_weaponHitbox = GetNode<WeaponHitbox>("WeaponHitbox");
 		_weaponAnimation = _weaponHitbox.GetNode("CollisionShape2D").GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_attackSFX = GetNode<AudioStreamPlayer>("AttackSFX");
 		CurrentHealth = MaxHealth;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		GetInput();
+		CalcMovementDirection();
 		MoveAndSlide();
 		if(CurrentHealth > 100) CurrentHealth = 100;
 		if(Input.IsActionJustPressed("attack")) Attack(Damage);
 		if(CurrentHealth < 0) EmitSignal(SignalName.PlayerHealthDepleted);
     }
 
-	//Movement logic
-	public void GetInput() {
+	//Berechnen in welche Richtung der Spieler laeuft
+	public void CalcMovementDirection() {
 		Godot.Vector2 inputDirection = Input.GetVector("move_left", "move_right", "move_up", "move_down");
 		Velocity = inputDirection * Speed;
 		if(inputDirection.X < 0)
@@ -60,17 +62,20 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
+	//Funktion zum Angreifen
 	public void Attack(int damage)
 	{
 		if(_canAttack)
 		{
 			_canAttack = false;
+			_attackSFX.Play();
 			_weaponAnimation.Play();
 			EmitSignal(SignalName.PlayerAttacked, _weaponHitbox, damage);
 			GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
 		}
 	}
 
+	//Entsenden eines Signals wenn ein Gegner den Spieler attackiert
 	public void EnemyAttacked(int damage)
 	{
 		CurrentHealth -= damage;

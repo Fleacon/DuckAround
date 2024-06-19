@@ -40,7 +40,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("5_navqu")
 theme_override_font_sizes/font_size = 48
-text = "Wave"
+text = "Wave:"
 script = ExtResource("6_426s3")
 
 [node name="Score" type="Label" parent="."]

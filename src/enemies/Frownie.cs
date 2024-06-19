@@ -40,33 +40,42 @@ public partial class Frownie : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		_healthbar.Value = Health;
-		if (Health <= 0)
+
+		if (Health <= 0) // Entsenden eines Signals wenn der Gegner kein Leben mehr hat
 		{
 			_gameData.Player.PlayerAttacked -= OnPlayerAttacked;
             QueueFree();
             EmitSignal(SignalName.EnemyHealthDepleted, Points);
 		}
-		if (_hurtbox.OverlapsBody(_gameData.Player) && _canAttack)
+		if (_hurtbox.OverlapsBody(_gameData.Player) && _canAttack) // Entsenden eines Signals wenn der Gegner in der naehe des Spielers ist
 		{
 			_canAttack = false;
 			EmitSignal(SignalName.PlayerInAttackRange, AttackDamage);
             GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
         }
-		Godot.Vector2 direction = Godot.Vector2.Zero;
-		direction = _navigation.GetNextPathPosition() - GlobalPosition;
-		direction = direction.Normalized();
-		Velocity = Velocity.Lerp(direction*Speed, (float)(Acceleration * delta));
-		if(direction.X < 0)
-		{
-			_sprite.FlipH = true;
-		}
-		if(direction.X > 0)
-		{
-			_sprite.FlipH = false;
-		}
+		
+		CalcMovementDirection(delta);
 		MoveAndSlide();
 	}
 
+	// Funktion um sich Richtung Spieler zu bewegen
+	public void CalcMovementDirection(double delta)
+	{
+        Godot.Vector2 direction = Godot.Vector2.Zero;
+        direction = _navigation.GetNextPathPosition() - GlobalPosition;
+        direction = direction.Normalized();
+        Velocity = Velocity.Lerp(direction * Speed, (float)(Acceleration * delta));
+        if (direction.X < 0)
+        {
+            _sprite.FlipH = true;
+        }
+        if (direction.X > 0)
+        {
+            _sprite.FlipH = false;
+        }
+    }
+
+	// Funktion um die Position und Eigenschaften des Gegners zu bestimmen, und die referenz GameData zu setzen
 	public void Initialize(Godot.Vector2 startPosition, GameData gameData, bool isSpecial)
 	{
 		_gameData = gameData;
@@ -84,21 +93,23 @@ public partial class Frownie : CharacterBody2D
 		}
     }
 
+	// Funktion, wenn der Spieler attackiert
 	public void OnPlayerAttacked(Area2D weaponHitbox, int damage)
 	{
-        GD.Print("Ouch");
         if (weaponHitbox.OverlapsBody(this))
 		{
 			Health -= damage;
 		}
 	}
 
+	// Funktion um die Position des Spielers als Navigationstarget zu setzen
 	public void SetTarget()
 	{
 		_navigation.TargetPosition = _gameData.Player.GlobalPosition;
 	}
 
-	public void ConnectSignals()
+    // Verbinden mit Signalen
+    public void ConnectSignals()
 	{
 		_gameData.Player.PlayerAttacked += OnPlayerAttacked;
 		PlayerInAttackRange += _gameData.Player.EnemyAttacked;

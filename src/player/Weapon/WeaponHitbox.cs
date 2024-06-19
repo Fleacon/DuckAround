@@ -22,6 +22,8 @@ public partial class WeaponHitbox : Area2D
 	{
 		UpdatePositionAndRoation(); 
 	}
+
+	// Veraendern der Position und Rotation des Angriffs um sich Richtung Maus zu positionieren
 	public void UpdatePositionAndRoation()
 	{
 		Position = _weaponOrigin.Position;

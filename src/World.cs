@@ -33,10 +33,13 @@ public partial class World : Node2D
         _gameData.CurrentMobLimit = _gameData.CurrentWave * 5;
     }
 
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+        //berechnen der momentan lebenden Gegnern
         _gameData.CurrentMobCount = GetTree().GetNodesInGroup("Enemies").Count;
         
+        //Spawntimer abschalten wenn der Limit erreicht ist
         if (_gameData.SpawnedMobs <= _gameData.CurrentMobLimit)
         {
             _mobSpawnTimer.Paused = false;
@@ -47,6 +50,7 @@ public partial class World : Node2D
         }
     }
 
+    //Funktion des spawnen der Gegner
     public void SpawnFrownie()
 	{
         Random rng = new();
@@ -61,6 +65,7 @@ public partial class World : Node2D
             var mobSpawnLocation = GetNode<PathFollow2D>("MobPath/MobSpawnLocation");
             bool isSpecial = false;
 
+            // Jede 10. Runde eine Chance einen besonderen Gegner zu spawnen
             if (_gameData.CurrentWave % 10 == 0)
             {
                 if(rng.Next(1, 101) < 10)
@@ -74,11 +79,14 @@ public partial class World : Node2D
             AddChild(frownie);
         }
     }
+
+    // Funktion zum Wechseln zur GameOverSzene
 	public void GameOver()
 	{
 		GetTree().ChangeSceneToPacked(GameOverScene);
     }
 
+    // Verbinden mit Signalen
     public void ConnectSignals()
     {
         _gameData.Player.PlayerHealthDepleted += GameOver;

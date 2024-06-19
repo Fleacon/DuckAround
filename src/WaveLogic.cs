@@ -17,6 +17,7 @@ public partial class WaveLogic : Node
         }
     }
 
+    // Erstellen einer neuen Welle
     public void CreateNewWave()
     {
         _gameData.SpawnedMobs = 0;

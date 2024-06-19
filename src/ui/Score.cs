@@ -17,6 +17,7 @@ public partial class Score : Label
 		Text = $"{_gameData.Score} :Score";
 	}
 
+	// Funktion um den Score zu updaten
 	public void UpdateScore(int points)
 	{
 		_gameData.Score += points;

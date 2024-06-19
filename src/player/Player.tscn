@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cexbc3lrswllq"]
+[gd_scene load_steps=18 format=3 uid="uid://cexbc3lrswllq"]
 
 [ext_resource type="Script" path="res://src/player/Player.cs" id="1_ihxxa"]
 [ext_resource type="Texture2D" uid="uid://koaykjfclfwx" path="res://assets/sprites/Player/Player1.png" id="2_ox738"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://6yh16uwpa6vc" path="res://assets/sprites/Weapons/Attack5.png" id="10_x6exr"]
 [ext_resource type="Script" path="res://src/player/Weapon/ExtendedMarker.cs" id="11_qednn"]
 [ext_resource type="Script" path="res://src/player/Weapon/WeaponOrigin.cs" id="12_s85yt"]
+[ext_resource type="AudioStream" uid="uid://cqh8pxuxj1xfy" path="res://sounds/sfx/PlayerAttackSFX.mp3" id="13_624tn"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_npdlf"]
 animations = [{
@@ -93,5 +94,9 @@ script = ExtResource("11_qednn")
 scale = Vector2(1.04891, 1)
 script = ExtResource("12_s85yt")
 Radius = 120.0
+
+[node name="AttackSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_624tn")
+volume_db = -20.0
 
 [connection signal="area_entered" from="WeaponHitbox" to="WeaponHitbox" method="OnHitboxEntered"]

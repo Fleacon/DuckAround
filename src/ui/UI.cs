@@ -14,6 +14,7 @@ public partial class UI : CanvasLayer
         _gameData = GetNode<GameData>("/root/GameData");
     }
 
+	// Verbinden der Healthbar mit dem Spieler Leben
 	public void InitHealthbar()
 	{
         _gameData.Player.PlayerTookDamage += _healthbar.ChangePlayerHealth;
@@ -21,6 +22,7 @@ public partial class UI : CanvasLayer
         _healthbar.MaxValue = _gameData.Player.MaxHealth;
     }
 
+	// Verbinden dem ScoreLable mit dem Gegner
 	public void InitScore(Frownie frownie)
 	{
 		frownie.EnemyHealthDepleted += _score.UpdateScore;
