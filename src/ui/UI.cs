@@ -17,7 +17,6 @@ public partial class UI : CanvasLayer
 	// Verbinden der Healthbar mit dem Spieler Leben
 	public void InitHealthbar()
 	{
-        _gameData.Player.PlayerTookDamage += _healthbar.ChangePlayerHealth;
         _healthbar.Value = _gameData.Player.MaxHealth;
         _healthbar.MaxValue = _gameData.Player.MaxHealth;
     }

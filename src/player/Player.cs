@@ -65,12 +65,20 @@ public partial class Player : CharacterBody2D
 	//Funktion zum Angreifen
 	public void Attack(int damage)
 	{
+		// Wenn es dem Spieler erlaubt ist anzugreifen
 		if(_canAttack)
 		{
+			// Cooldown aktivieren
 			_canAttack = false;
+
+			// Animation und Soundeffekt abspielen
 			_attackSFX.Play();
 			_weaponAnimation.Play();
+
+			// Signal senden mit dem Hitbox der Waffe und dem ausgerichteten Schaden
 			EmitSignal(SignalName.PlayerAttacked, _weaponHitbox, damage);
+
+			// Timer erstellen mit der Laenge von AttackCooldown, welches wenn abgeschlossen es erlaubt dem Spieler anzugreifen
 			GetTree().CreateTimer(AttackCooldown).Timeout += () => _canAttack = true;
 		}
 	}
@@ -79,6 +87,5 @@ public partial class Player : CharacterBody2D
 	public void EnemyAttacked(int damage)
 	{
 		CurrentHealth -= damage;
-        EmitSignal(SignalName.PlayerTookDamage, CurrentHealth);
 	}
 }

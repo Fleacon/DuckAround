@@ -78,11 +78,19 @@ public partial class Frownie : CharacterBody2D
 	// Funktion um die Position und Eigenschaften des Gegners zu bestimmen, und die referenz GameData zu setzen
 	public void Initialize(Godot.Vector2 startPosition, GameData gameData, bool isSpecial)
 	{
-		_gameData = gameData;
-		GlobalPosition = startPosition;
+		// Setzen der startposition
+        GlobalPosition = startPosition;
+
+        // Verbinden mit Score
+        _gameData = gameData;
         _gameData.UI.InitScore(this);
-		AddToGroup("Enemies");
+		// Spawned Mobs erhoehen
         _gameData.SpawnedMobs += 1;
+
+        // Zur "Enemies" Gruppe hinzufuegen
+        AddToGroup("Enemies");
+
+		// Aendern der Eigenschaften bei, wenn speziell
 		if (isSpecial)
 		{
 			_healthbar.MaxValue = 250;
@@ -96,6 +104,7 @@ public partial class Frownie : CharacterBody2D
 	// Funktion, wenn der Spieler attackiert
 	public void OnPlayerAttacked(Area2D weaponHitbox, int damage)
 	{
+		// Wenn die Waffe genau diesen Gegner beruehrt
         if (weaponHitbox.OverlapsBody(this))
 		{
 			Health -= damage;

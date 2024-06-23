@@ -60,3 +60,42 @@ vertical_alignment = 1
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_6o8xd")
 autoplay = true
+
+[node name="Steuerung" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="Steuerung"]
+offset_left = 426.0
+offset_top = 109.0
+offset_right = 620.0
+offset_bottom = 164.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ytqci")
+theme_override_font_sizes/font_size = 32
+text = "WASD / Arrowkeys
+Walk"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Steuerung"]
+offset_left = 410.0
+offset_top = 177.0
+offset_right = 636.0
+offset_bottom = 232.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ytqci")
+theme_override_font_sizes/font_size = 32
+text = "Left Mousebutton / C
+Attack"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Steuerung"]
+offset_left = 418.0
+offset_top = 247.0
+offset_right = 628.0
+offset_bottom = 331.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_ytqci")
+theme_override_font_sizes/font_size = 32
+text = "F11 / O
+Windowed -> Full
+Full -> Windowed"
+horizontal_alignment = 1

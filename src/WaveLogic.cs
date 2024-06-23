@@ -23,9 +23,13 @@ public partial class WaveLogic : Node
         _gameData.SpawnedMobs = 0;
         _gameData.CurrentWave += 1;
         _gameData.CurrentMobLimit = _gameData.CurrentWave * 5;
-        if(_gameData.CurrentWave % 5 == 0)
+        if(_gameData.CurrentWave % 10 == 0)
         {
-            _gameData.Player.CurrentHealth += 10;
+            _gameData.Player.CurrentHealth += 40;
+        } 
+        else if(_gameData.CurrentWave % 5 == 0)
+        {
+            _gameData.Player.CurrentHealth += 20;
         }
     }
 }
